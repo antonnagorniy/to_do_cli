@@ -15,7 +15,7 @@ fn main() {
 
     for x in arguments {
         if x == get_command {
-            let y = todos.get(0);
+            let y = todos.get(0).clone();
             println!("{}", y);
         } else if x == add_command {
             todos.add(TodoItem::new("Test".to_string(), ' '))
