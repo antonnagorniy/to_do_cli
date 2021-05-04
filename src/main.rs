@@ -7,6 +7,7 @@ use crate::models::items::TodoList;
 fn main() {
     let get_command = String::from("get");
     let add_command = String::from("add");
+    let complete_command = String::from("compl");
 
     let arguments: Vec<String> = env::args().collect();
 
@@ -14,11 +15,12 @@ fn main() {
 
     for x in arguments {
         if x == get_command {
-            for y in &todos.list {
-                println!("{}", y);
-            }
+            let y = todos.get(0);
+            println!("{}", y);
         } else if x == add_command {
             todos.add(TodoItem::new("Test".to_string(), ' '))
+        }else if x == complete_command {
+            todos.get(0).complete_item()
         }
     }
 }

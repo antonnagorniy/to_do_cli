@@ -3,14 +3,18 @@ pub mod items {
     use std::fmt::Formatter;
 
     #[derive(Debug)]
+    #[derive(Clone)]
     pub struct TodoItem {
-        pub name: String,
-        pub completed: char,
+        name: String,
+        completed: char,
     }
 
     impl TodoItem {
         pub fn new(name: String, completed: char) -> TodoItem {
             TodoItem{ name, completed }
+        }
+        pub fn complete_item(&mut self){
+            self.completed = 'X'
         }
     }
 
@@ -22,7 +26,7 @@ pub mod items {
 
     #[derive(Debug)]
     pub struct TodoList {
-        pub list: Vec<TodoItem>
+        list: Vec<TodoItem>
     }
 
     impl TodoList {
@@ -32,6 +36,10 @@ pub mod items {
 
         pub fn add(&mut self, item: TodoItem) {
             self.list.push(item)
+        }
+
+        pub fn get(&mut self, index: usize) -> &mut TodoItem {
+            return &mut self.list[index];
         }
     }
 }
