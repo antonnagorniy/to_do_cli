@@ -1,6 +1,6 @@
 pub mod items {
     use std::fmt;
-    use std::fmt::Formatter;
+    use std::fmt::{Formatter};
 
     #[derive(Debug)]
     #[derive(Clone)]
@@ -11,9 +11,9 @@ pub mod items {
 
     impl TodoItem {
         pub fn new(name: String, completed: char) -> TodoItem {
-            TodoItem{ name, completed }
+            TodoItem { name, completed }
         }
-        pub fn complete_item(&mut self){
+        pub fn complete_item(&mut self) {
             self.completed = 'X'
         }
     }
@@ -26,12 +26,12 @@ pub mod items {
 
     #[derive(Debug)]
     pub struct TodoList {
-        list: Vec<TodoItem>
+        list: Vec<TodoItem>,
     }
 
     impl TodoList {
         pub fn new() -> TodoList {
-            return TodoList{ list: Vec::new() }
+            return TodoList { list: Vec::new() };
         }
 
         pub fn add(&mut self, item: TodoItem) {
@@ -40,6 +40,15 @@ pub mod items {
 
         pub fn get(&mut self, index: usize) -> &mut TodoItem {
             return &mut self.list[index];
+        }
+
+        pub fn get_by_name(&self, name: String) -> Option<&TodoItem> {
+            for todo in &self.list {
+                if todo.name == name {
+                    return Some(&todo);
+                }
+            };
+            None
         }
     }
 }
