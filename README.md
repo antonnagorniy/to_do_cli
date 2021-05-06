@@ -1,1 +1,1 @@
-# Learning Rust by making todo CLI app
+# Learning Rust by making a todo CLI app
