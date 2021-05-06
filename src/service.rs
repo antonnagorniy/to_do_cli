@@ -3,6 +3,7 @@ pub mod helpers {
         GetAll,
         Add(String),
         Complete(String),
-        Uncomplete(String)
+        Uncomplete(String),
+        Remove(String),
     }
 }

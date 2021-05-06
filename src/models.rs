@@ -1,7 +1,6 @@
 pub mod items {
     use std::fmt;
-    use std::fmt::{Formatter};
-    use std::borrow::Borrow;
+    use std::fmt::Formatter;
 
     #[derive(Debug, Clone)]
     pub struct TodoItem {
@@ -31,29 +30,65 @@ pub mod items {
 
     #[derive(Debug)]
     pub struct TodoList {
-        list: Vec<TodoItem>
+        list: Vec<TodoItem>,
+    }
+
+    impl fmt::Display for TodoList {
+        fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+            let mut result: String = "".to_string();
+            for item in self.list.iter() {
+                result.push_str(format!("[{}] - {}\n", item.completed, item.name).as_str());
+            }
+            write!(f, "{}", result)
+        }
     }
 
     impl TodoList {
         pub fn new() -> TodoList {
-            return TodoList{ list: Vec::new() }
+            return TodoList { list: Vec::new() };
         }
 
-        pub fn add(&mut self, item: TodoItem) {
+        pub fn push(&mut self, item: TodoItem) {
             self.list.push(item)
         }
 
-        pub fn get(&mut self, index: usize) -> &TodoItem {
-            return self.list[index].borrow();
+        pub fn remove(&mut self, name: String) -> bool {
+            let mut done = false;
+            let mut index: usize = 0;
+            for (indx, item) in self.list.iter().enumerate() {
+                if item.name == name {
+                    index = indx;
+                    done = true;
+                }
+            }
+
+            if done {
+                self.list.remove(index);
+            }
+
+            return done;
         }
 
-        pub fn get_by_name(&self, name: String) -> Option<&TodoItem> {
-            for todo in self.list.iter() {
-                if todo.name == name {
-                    return Some(todo);
+        pub fn done(&mut self, name: String) -> bool {
+            let mut completed = false;
+            for item in self.list.iter_mut() {
+                if item.name == name {
+                    item.complete();
+                    completed = true;
                 }
-            };
-            None
+            }
+            return completed;
+        }
+
+        pub fn undone(&mut self, name: String) -> bool {
+            let mut completed = false;
+            for item in self.list.iter_mut() {
+                if item.name == name {
+                    item.uncomplete();
+                    completed = true;
+                }
+            }
+            return completed;
         }
     }
 }
