@@ -1,45 +1,48 @@
-mod models;
-
 use std::env;
-use models::items::TodoItem;
-use crate::models::items::TodoList;
-use std::ops::Add;
 
-const GET_COMMAND: &str = "get";
-const ADD_COMMAND: &str = "add";
-const COMPLETE_COMMAND: &str = "compl";
+use models::items::TodoItem;
+use service::helpers;
+
+mod models;
+mod service;
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
-    let arg = arguments[1].clone();
-    let mut todos_list = TodoList::new();
-    todos_list.add(TodoItem::new("StaticTask".to_string(), ' '));
+    let command = match arguments[1].as_str() {
+        "get" => helpers::Commands::GetAll,
+        "add" => helpers::Commands::Add(arguments[2].clone()),
+        "compl" => helpers::Commands::Complete(arguments[2].clone()),
+        "uncompl" => helpers::Commands::Uncomplete(arguments[2].clone()),
+        _ => panic!("Unknown command")
+    };
 
-    match arg.as_str() {
-        GET_COMMAND => {
-            let name = arguments[2].clone();
-            let option = todos_list.get_by_name(name.clone());
-            println!("{}",
-                     option.expect("There is no such task: "
-                         .to_string()
-                         .add(&name)
-                         .as_str()));
+    let mut todos_list = Vec::new();
+    todos_list.push(TodoItem::new("StaticTask".to_string(), ' '));
+    todos_list.push(TodoItem::new("CompletedTask".to_string(), 'X'));
+
+    match command {
+        helpers::Commands::GetAll => {
+            println!("{:#?}", todos_list)
         }
-        ADD_COMMAND => {
-            let task_name = arguments[2].clone();
-            todos_list.add(TodoItem::new(task_name.clone(), ' '));
-            let option = todos_list.get_by_name(task_name.clone());
-            println!("{}",
-                     option.expect("There is no such task: "
-                         .to_string()
-                         .add(&task_name)
-                         .as_str()));
+        helpers::Commands::Add(task_name) => {
+            todos_list.push(TodoItem::new(task_name.clone(), ' '));
+            println!("{:#?}", todos_list)
         }
-        COMPLETE_COMMAND => {
-            todos_list.get(0).complete_item();
+        helpers::Commands::Complete(name) => {
+            for item in todos_list.iter_mut() {
+                if item.name == name {
+                    item.complete();
+                }
+            }
+            println!("{:#?}", &todos_list)
         }
-        _ => {
-            println!("Unknown command!")
+        helpers::Commands::Uncomplete(name) => {
+            for item in todos_list.iter_mut() {
+                if item.name == name {
+                    item.uncomplete();
+                }
+            }
+            println!("{:#?}", &todos_list)
         }
     }
 }
