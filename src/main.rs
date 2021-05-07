@@ -29,7 +29,7 @@ fn main() {
             println!("{}", todos_list)
         }
         helpers::Commands::Add(task_name) => {
-            todos_list.push(TodoItem::new(task_name.clone(), ' '));
+            todos_list.push(TodoItem::new(task_name, ' '));
             println!("{}", todos_list)
         }
         helpers::Commands::Complete(name) => {
@@ -37,7 +37,7 @@ fn main() {
             if done {
                 println!("{}", &todos_list)
             } else {
-                println!("Task {} not found.", name.clone())
+                println!("Task {} not found.", name)
             }
         }
         helpers::Commands::Uncomplete(name) => {
@@ -45,7 +45,7 @@ fn main() {
             if undone {
                 println!("{}", &todos_list)
             } else {
-                println!("Task {} not found.", name.clone())
+                println!("Task {} not found.", name)
             }
         }
         helpers::Commands::Remove(name) => {
@@ -54,7 +54,7 @@ fn main() {
                 println!("{} deleted.", name.clone());
                 println!("{}", &todos_list);
             } else {
-                println!("Task {} not found.", name.clone())
+                println!("Task {} not found.", name)
             }
         }
     }
